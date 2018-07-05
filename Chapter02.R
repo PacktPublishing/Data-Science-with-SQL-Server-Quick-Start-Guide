@@ -5,22 +5,16 @@
 R.version.string
 contributors()
 
-# Getting help on help
-help()
-# General help
-help.start()
-# Help about global options
-help("options")
-# Help on the function exp()
-help("exp")
-?"exp"
-# Examples for the function exp()
-example("exp")
-# Search
-help.search("constants")
-??"constants"
-# Online search 
-RSiteSearch("exp")
+# Help options
+help()          # Getting help on help
+help.start()    # General help
+help("options") # Help about global options
+help("exp")     # Help on the function exp()
+?"exp"          # Help on the function exp()
+example("exp")  # Examples for the function exp()
+help.search("constants") # Search
+?? "constants"           # Search
+RSiteSearch("exp")       # Online search
 
 # Demonstrate graphics capabilities
 demo("graphics")
@@ -34,6 +28,7 @@ pie(pie.sales,
 title(main = "January Pie Sales", cex.main = 1.8, font.main = 1)
 title(xlab = "(Don't try this at home kids)", cex.lab = 0.8, font.lab = 3)
 
+# Listing the objects
 objects()
 ls()
 # Get working folder
@@ -45,9 +40,9 @@ getwd()
 sink()
 
 # Basic expressions
-1 + 1
-2 + 3 * 4
-3 ^ 3
+1 + 2
+2 + 5 * 4
+3 ^ 4
 sqrt(81)
 pi
 
@@ -55,10 +50,10 @@ pi
 ?? "constants"
 
 # Sequences
-rep(1, 10)
-3:7
-seq(3, 7)
-seq(5, 17, by = 3)
+rep(1, 5)
+4:8
+seq(4, 8)
+seq(4, 20, by = 3)
 
 # Variables
 x <- 2
@@ -98,17 +93,17 @@ x <- c(2, 0, 0, 4)
 x[1]          # Selects the first element
 x[-1]         # Excludes the first element
 x[1] <- 3     # Assigns a value to the first element
-x
+x             # Shows the vector
 x[-1] = 5     # Assigns a value to all other elements
-x
+x             # Shows the vector
 
 # Vector elements logical operations
 y <- c(1, 9, 9, 9)
 y < 8         # Compares each element, returns result as vector
 y[4] = 1      # Assigns a value to the first element
-y < 8
+y < 8         # Compares each element, returns result as vector
 y[y < 8] = 2  # Edits elements marked as TRUE in index vector
-y
+y             # Shows the vector
 
 # Check the installed packages
 installed.packages()
@@ -140,8 +135,8 @@ Z = matrix(x, 2, 3, byrow = F); Z
 U = matrix(x, 2, 3, byrow = T); U
 
 # Using explicit names
-rnames = c("Row1", "Row2")
-cnames = c("Col1", "Col2", "Col3")
+rnames = c("rrr1", "rrr2")
+cnames = c("ccc1", "ccc2", "ccc3")
 V = matrix(x, 2, 3, byrow = T,
     dimnames = list(rnames, cnames))
 V
@@ -150,15 +145,22 @@ V
 U[1,]
 U[1, c(2, 3)]
 U[, c(2, 3)]
-V[, c("Col2", "Col3")]
+V[, c("ccc2", "ccc3")]
+
+# Array
+rnames = c("rrr1", "rrr2")
+cnames = c("ccc1", "ccc2", "ccc3")
+pnames = c("ppp1", "ppp2", "ppp3")
+Y = array(1:18, dim = c(2, 3, 3),
+    dimnames = list(rnames, cnames, pnames))
+Y
 
 # Factor
 x = c("good", "moderate", "good", "bad", "bad", "good")
 y = factor(x); y
 z = factor(x, order = TRUE); z
 w = factor(x, order = TRUE,
-           levels = c("bad", "moderate", "good"));
-w
+           levels = c("bad", "moderate", "good")); w
 
 # List
 L = list(name1 = "ABC", name2 = "DEF",

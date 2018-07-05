@@ -1,52 +1,56 @@
 # Data Science with SQL Server Quick Start Guide
 # Chapter 03
 
-# Hash starts a comment
+# This is a comment
 print("Hello World!")
-# This line ignored
-print('Printing again.')
-print('O"Hara')   # In-line comment
-print("O'Hara")
+# This line is ignored - it is a comment again
+print('Another string.')
+print('O"Brien')   # In-line comment
+print("O'Brien")
 
 # Simple expressions
-1 + 2
-print("The result of 3 + 20 / 4 is:", 3 + 20 / 4)
-10 * 2 - 7
-10 % 4
-print("Is 7 less or equal to 5?", 7 <= 5)
-print("Is 7 greater than 5?", 7 > 5)
+3 + 2
+print("The result of 5 + 30 / 6 is:", 5 + 30 / 6)
+10 * 3 - 6
+11 % 4
+print("Is 8 less or equal to 5?", 8 <= 5)
+print("Is 8 greater than 5?", 8 > 5)
 
 # Integer
-a = 2
-b = 3
+a = 3
+b = 4
 a ** b
 # Float
-c = 7.0
-d = float(5)
+c = 6.0
+d = float(7)
 print(c, d)
 
-# String
-e = "String 1"
-f = 10
-print("Let's concatenate string %s and number %d." % (e, f))
-four_cb = "String {} {} {} {}"
-print(four_cb.format(1, 2, 3, 4))
+# Formatted strings
+# Variables in print()
+e = "repeat"
+f = 5
+print("Let's %s string formatting %d times." % (e, f))
+# String.format()
+four_par = "String {} {} {} {}"
+print(four_par.format(1, 2, 3, 4))
+print(four_par.format('a', 'b', 'c', 'd'))
 
 # More strings
-print("""Note three double quotes.
-Allow you to print multiple lines.
-As many as you wish.""")
+print("""Three double quotes
+are needed to delimit strings in multiple lines.
+You can have as many lines as you wish.""")
 a = "I am 5'11\" tall"
 b = 'I am 5\'11" tall'
 print("\t" + a + "\n\t" + b)
 
 # Functions
-def p_n():
-    print("No args...")
+def nopar():
+    print("No parameters")
 def add(a, b):
     return a + b
-# Call
-p_n()
+
+# Call without arguments
+nopar()
 # Call with variables and math
 a = 10
 b = 20
@@ -78,17 +82,18 @@ for i in range(2, 5):
     nums.append(i)
 print(nums)
 i = 1
-while i <= 10:
+while i <= 3:
     print(i)
     i = i + 1
 
 # Dictionary
-states = {
-    "Oregon": "OR",
-    "Florida": "FL",
-    "Michigan": "MI"}
-for state, abbrev in list(states.items()):
-    print("{} is abbreviated {}.".format(state, abbrev))
+CtyCou = {
+    "Paris": "France",
+    "Tokyo": "Japan",
+    "Lagos": "Nigeria"}
+for city, country in list(CtyCou.items()):
+    print("{} is in {}.".format(city, country))
+
 
 # Demo graphics
 # Imports
@@ -99,9 +104,9 @@ import matplotlib.pyplot as plt
 
 # Reading the data from SQL Server
 con = pyodbc.connect('DSN=AWDW;UID=RUser;PWD=Pa$$w0rd')
-query = """SELECT CustomerKey, Age,
-             YearlyIncome, TotalChildren,
-             NumberCarsOwned
+query = """SELECT CustomerKey, 
+             Age, YearlyIncome, 
+             CommuteDistance, BikeBuyer
            FROM dbo.vTargetMail;"""
 TM = pd.read_sql(query, con)
 
@@ -109,11 +114,21 @@ TM = pd.read_sql(query, con)
 TM.head(5)
 TM.shape
 
-# Crosstabulation
-obb = pd.crosstab(TM.NumberCarsOwned, TM.TotalChildren)
-obb
+# Define CommuteDistance as categorical
+TM['CommuteDistance'] = TM['CommuteDistance'].astype('category')
+# Reordering Education
+TM['CommuteDistance'].cat.reorder_categories(
+    ["0-1 Miles", 
+     "1-2 Miles","2-5 Miles", 
+     "5-10 Miles", "10+ Miles"], inplace=True)
 
-obb.plot(kind = 'bar')
+# Crosstabulation
+cdbb = pd.crosstab(TM.CommuteDistance, TM.BikeBuyer)
+cdbb
+
+cdbb.plot(kind = 'bar',
+          fontsize = 14, legend = True, 
+          use_index = True, rot = 1)
 plt.show()
 
 # Introducting numpy
@@ -158,11 +173,12 @@ ser1['b':'c']
 
 # Data frame descriptive statistics
 TM.describe()
-TM['Age'].mean(), TM['Age'].std()
-TM['Age'].skew(), TM['Age'].kurt()
+TM['YearlyIncome'].mean(), TM['YearlyIncome'].std()
+TM['YearlyIncome'].skew(), TM['YearlyIncome'].kurt()
 
 # Histogram and a kernel density plot
-(TM['Age']).hist(bins = 25, normed = True, 
-                      color = 'lightblue')
-(TM['Age']).plot(kind='kde', style='r--', xlim = [0, 80])
+(TM['YearlyIncome']).hist(bins = 25, normed = True, 
+                          color = 'lightblue')
+(TM['YearlyIncome']).plot(kind='kde', 
+                          style='r--', xlim = [0, 200000])
 plt.show()
