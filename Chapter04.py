@@ -12,7 +12,7 @@ import seaborn as sns
 
 # Reading the data from SQL Server
 con = pyodbc.connect('DSN=AWDW;UID=RUser;PWD=Pa$$w0rd')
-query = """SELECT CustomerKey, 
+query = """SELECT CustomerKey, CommuteDistance,
             TotalChildren, NumberChildrenAtHome, 
             Gender, HouseOwnerFlag,
             NumberCarsOwned, MaritalStatus,

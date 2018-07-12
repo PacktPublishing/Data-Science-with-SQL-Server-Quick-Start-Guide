@@ -4,30 +4,42 @@
 USE AdventureWorksDW2017;
 GO
 
--- Frequencies
+SELECT DISTINCT CommuteDistance
+FROM dbo.vTargetMail
+ORDER BY CommuteDistance;
+
+
+-- Frequencies with ordered CommuteDistance
 WITH freqCTE AS
 (
-SELECT v.NumberCarsOwned,
- COUNT(v.NumberCarsOwned) AS AbsFreq,
- CAST(ROUND(100. * (COUNT(v.NumberCarsOwned)) /
+SELECT CASE v.CommuteDistance 
+         WHEN '0-1 Miles' THEN '1 - 0-1 Miles'
+		 WHEN '1-2 Miles' THEN '2 - 1-2 Miles'
+         WHEN '2-5 Miles' THEN '3 - 2-5 Miles'
+         WHEN '5-10 Miles' THEN '4 - 5-10 Miles'
+		 WHEN '10+ Miles' THEN '5 - 10+ Miles'
+       END AS CommuteDistance,
+ COUNT(v.CommuteDistance) AS AbsFreq,
+ CAST(ROUND(100. * (COUNT(v.CommuteDistance)) /
        (SELECT COUNT(*) FROM vTargetMail), 0) AS INT) AS AbsPerc
 FROM dbo.vTargetMail AS v
-GROUP BY v.NumberCarsOwned
+GROUP BY v.CommuteDistance
 )
-SELECT NumberCarsOwned,
+SELECT CommuteDistance,
  AbsFreq,
  SUM(AbsFreq) 
-  OVER(ORDER BY NumberCarsOwned 
+  OVER(ORDER BY CommuteDistance 
        ROWS BETWEEN UNBOUNDED PRECEDING
-        AND CURRENT ROW) AS CumFreq,
+	    AND CURRENT ROW) AS CumFreq,
  AbsPerc,
  SUM(AbsPerc)
-  OVER(ORDER BY NumberCarsOwned
+  OVER(ORDER BY CommuteDistance
        ROWS BETWEEN UNBOUNDED PRECEDING
-        AND CURRENT ROW) AS CumPerc,
+	    AND CURRENT ROW) AS CumPerc,
  CAST(REPLICATE('*',AbsPerc) AS VARCHAR(50)) AS Histogram
 FROM freqCTE
-ORDER BY NumberCarsOwned;
+ORDER BY CommuteDistance;
+GO
 
 
 -- Centers

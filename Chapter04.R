@@ -6,7 +6,7 @@ library(RODBC)
 con <- odbcConnect("AWDW", uid = "RUser", pwd = "Pa$$w0rd")
 TM <-
 sqlQuery(con,
-         "SELECT CustomerKey, 
+         "SELECT CustomerKey, CommuteDistance,
             TotalChildren, NumberChildrenAtHome, 
             Gender, HouseOwnerFlag,
             NumberCarsOwned, MaritalStatus,
