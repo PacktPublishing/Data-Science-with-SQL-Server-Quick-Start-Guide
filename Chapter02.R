@@ -119,8 +119,13 @@ library(RODBC)
 # Getting help about RODBC
 help(package = "RODBC")
 
-# Read SQL Server data
+# Ad-hoc connection
+con <- odbcDriverConnect('driver={SQL Server};server=SQL2017EIM;
+    database=AdventureWorksDW2017;uid=RUser;pwd=Pa$$w0rd')
+
+# DSN connection
 con <- odbcConnect("AWDW", uid = "RUser", pwd = "Pa$$w0rd")
+# Read SQL Server data
 sqlQuery(con,
          "SELECT CustomerKey,
             EnglishEducation AS Education,

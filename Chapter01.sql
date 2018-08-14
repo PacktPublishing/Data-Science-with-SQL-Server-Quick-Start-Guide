@@ -169,7 +169,7 @@ SELECT e.EmployeeKey, e.LastName,
  (SELECT SUM(fr1.SalesAmount) 
   FROM dbo.FactResellerSales AS fr1
   WHERE fr1.EmployeeKey = e.EmployeeKey)
-  AS TotelPerEmployee,
+  AS TotalPerEmployee,
  frt.GrandTotal
 FROM (dbo.DimEmployee AS e
  INNER JOIN dbo.FactResellerSales AS fr
@@ -183,7 +183,7 @@ ORDER BY e.EmployeeKey;
 SELECT e.EmployeeKey, e.LastName,
  fr.SalesAmount,
  SUM(fr.SalesAmount) OVER(PARTITION BY e.EmployeeKey) 
-  AS TotelPerEmployee,
+  AS TotalPerEmployee,
  SUM(fr.SalesAmount) OVER()
  AS GrandTotal
 FROM dbo.DimEmployee AS e
@@ -196,14 +196,14 @@ WITH EmpTotalCTE AS
 (
 SELECT e.EmployeeKey,
  MIN(e.LastName) AS LastName,
- SUM(fr.SalesAmount) AS TotelPerEmployee
+ SUM(fr.SalesAmount) AS TotalPerEmployee
 FROM dbo.DimEmployee AS e
  INNER JOIN dbo.FactResellerSales AS fr
   ON e.EmployeeKey = fr.EmployeeKey
 GROUP BY e.EmployeeKey
 )
 SELECT EmployeeKey, LastName, 
- TotelPerEmployee
+ TotalPerEmployee
 FROM EmpTotalCTE
 ORDER BY EmployeeKey;
 
@@ -212,20 +212,20 @@ WITH EmpTotalCTE AS
 (
 SELECT e.EmployeeKey,
  MIN(e.LastName) AS LastName,
- SUM(fr.SalesAmount) AS TotelPerEmployee
+ SUM(fr.SalesAmount) AS TotalPerEmployee
 FROM dbo.DimEmployee AS e
  INNER JOIN dbo.FactResellerSales AS fr
   ON e.EmployeeKey = fr.EmployeeKey
 GROUP BY e.EmployeeKey
 )
 SELECT EmployeeKey, LastName,
- TotelPerEmployee,
- SUM(TotelPerEmployee) 
+ TotalPerEmployee,
+ SUM(TotalPerEmployee) 
   OVER(ORDER BY EmploYeeKey
        ROWS BETWEEN UNBOUNDED PRECEDING
                 AND CURRENT ROW)
   AS RunningTotal,
- AVG(TotelPerEmployee) 
+ AVG(TotalPerEmployee) 
   OVER(ORDER BY EmploYeeKey
        ROWS BETWEEN 2 PRECEDING
                 AND CURRENT ROW)

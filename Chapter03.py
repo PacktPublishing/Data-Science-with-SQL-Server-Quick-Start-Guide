@@ -91,8 +91,8 @@ CtyCou = {
     "Paris": "France",
     "Tokyo": "Japan",
     "Lagos": "Nigeria"}
-for city, country in list(CtyCou.items()):
-    print("{} is in {}.".format(city, country))
+for city, country in CtyCou.items():
+    print("{0} is in {1}.".format(city, country))
 
 
 # Demo graphics
